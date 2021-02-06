@@ -9,12 +9,16 @@ use Psr\Http\Message\{
     ServerRequestInterface as Request,
     ResponseInterface as Response
 };
+use spf\contracts\database\DatabaseConnection;
 
 abstract class SimpleAction {
+
+    protected DatabaseConnection $db;
 
     protected Twig $view;
 
     public function __construct( ContainerInterface $c ) {
+        $this->db   = $c->get('db');
         $this->view = $c->get('view');
     }
 

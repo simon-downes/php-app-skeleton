@@ -16,11 +16,9 @@ return function( ContainerBuilder $containerBuilder ) {
                 'debug' => SPF::isDebug(),
             ],
 
-            // 'database' => [
-            //     'hostname' => $_ENV['DB_HOST'] ?? 'localhost',
-            //     'username' => $_ENV['DB_USER'] ?? 'root',
-            //     'password' => $_ENV['DB_PASS'] ?? 'abc123',
-            // ],
+            'database' => [
+                'dsn' => $_ENV['DB_DSN'],
+            ],
 
             // view settings
             // 'view' => [

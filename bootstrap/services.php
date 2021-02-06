@@ -4,6 +4,8 @@ use spf\SPF;
 use Psr\Container\ContainerInterface;
 use DI\ContainerBuilder;
 use Slim\Views\Twig;
+use spf\database\BaseConnectionManager;
+use spf\database\DSN;
 
 return function( ContainerBuilder $containerBuilder ) {
 
@@ -21,6 +23,16 @@ return function( ContainerBuilder $containerBuilder ) {
                     'auto_reload' => $settings['auto_reload'] ?? SPF::isDebug(),
                 ]
             );
+        },
+
+        'db' => function( ContainerInterface $c ) {
+
+            $dsn = $c->get('config')['database.dsn'];
+
+            return BaseConnectionManager::createFromDSN(
+                DSN::fromString($dsn)
+            );
+
         },
 
     ]);
