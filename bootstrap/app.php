@@ -4,7 +4,7 @@ use Slim\Factory\AppFactory;
 use DI\ContainerBuilder;
 use Symfony\Component\Dotenv\Dotenv;
 use Slim\Views\TwigMiddleware;
-use spf\SPF;
+use spl\SPL;
 
 define('APP_ROOT', realpath(__DIR__. '/..'));
 
@@ -14,21 +14,21 @@ require APP_ROOT. '/vendor/autoload.php';
 // so we don't pollute the global namespace with our temp variables
 return function() {
 
-    SPF::init();
+    SPL::init();
 
     // load environment file
     $dotenv = new Dotenv();
     $dotenv->load(APP_ROOT. '/.env');
 
     // set debug flag based on env file
-    SPF::setDebug(filter_var($_ENV['APP_DEBUG'], FILTER_VALIDATE_BOOLEAN));
+    SPL::setDebug(filter_var($_ENV['APP_DEBUG'], FILTER_VALIDATE_BOOLEAN));
 
     // create a ContainerBuilder instance into which we can load our definitions
     $containerBuilder = new ContainerBuilder();
 
     // not in debug mode so enable container caching
     // TODO: need to remove cached file otherwise
-    if( !SPF::isDebug() ) {
+    if( !SPL::isDebug() ) {
         $containerBuilder->enableCompilation(APP_ROOT. '/var/cache');
     }
 

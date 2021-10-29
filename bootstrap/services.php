@@ -1,39 +1,63 @@
 <?php declare(strict_types=1);
 
-use spf\SPF;
+use spl\SPL;
 use Psr\Container\ContainerInterface;
 use DI\ContainerBuilder;
 use Slim\Views\Twig;
-use spf\database\BaseConnectionManager;
-use spf\database\DSN;
+use spl\contracts\database\DatabaseConnection;
+use spl\database\ConnectionManager;
+use spl\database\DSN;
 
 return function( ContainerBuilder $containerBuilder ) {
 
     $containerBuilder->addDefinitions([
 
         'view' => function( ContainerInterface $c ) {
+            return $c->get(Twig::class);
+        },
+
+        Twig::class => function( ContainerInterface $c ) {
 
             $settings = $c->get('config')['view'];
 
             return Twig::create(
                 $settings['template_path'] ?? APP_ROOT. '/resources/views',
                 [
-                    'cache'       => $settings['cache'] ?? !SPF::isDebug(),
-                    'debug'       => $settings['debug'] ?? SPF::isDebug(),
-                    'auto_reload' => $settings['auto_reload'] ?? SPF::isDebug(),
+                    'cache'       => $settings['cache'] ?? false,
+                    'debug'       => $settings['debug'] ?? SPL::isDebug(),
+                    'auto_reload' => $settings['auto_reload'] ?? SPL::isDebug(),
                 ]
             );
         },
 
-        'db' => function( ContainerInterface $c ) {
+        ConnectionManager::class => function( ContainerInterface $c ) {
 
-            $dsn = $c->get('config')['database.dsn'];
+            $dbm = new ConnectionManager();
 
-            return BaseConnectionManager::createFromDSN(
-                DSN::fromString($dsn)
-            );
+            foreach( $c->get('config')->get('databases', []) as $name => $dsn ) {
+                $dbm->add($name, new DSN($dsn));
+            }
+
+            return $dbm;
 
         },
+
+        DatabaseConnection::class => function( ContainerInterface $c ) {
+
+            return $c->get(ConnectionManager::class)->get();
+
+        },
+
+
+        // 'db' => function( ContainerInterface $c ) {
+
+        //     $dsn = $c->get('config')['database.dsn'];
+
+        //     return ConnectionManager::createFromDSN(
+        //         DSN::fromString($dsn)
+        //     );
+
+        // },
 
     ]);
 

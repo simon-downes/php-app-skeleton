@@ -2,17 +2,22 @@
 
 namespace App\Actions;
 
-use spf\web\SimpleAction;
+use Slim\Views\Twig;
+
+use spl\contracts\database\DatabaseConnection;
 
 use Psr\Http\Message\{
     ServerRequestInterface as Request,
     ResponseInterface as Response
 };
 
-class HomeAction extends SimpleAction {
+class HomeAction {
 
-    public function __invoke( Request $request, Response $response ) {
-        return $this->render($response, 'home.html');
+    use TwigAction;
+
+    private const TWIG_TEMPLATE = 'home.html';
+
+    public function __construct( protected Twig $view, protected DatabaseConnection $db ) {
     }
 
 }
