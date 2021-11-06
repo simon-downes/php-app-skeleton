@@ -13,22 +13,17 @@ use Psr\Http\Message\{
 trait TwigAction {
 
     /**
-     * Context array that will be passed to the twig template.
-     */
-    protected array $context = [];
-
-    /**
      * Default implementation that just renders the template defined in the calling class.
      */
     public function __invoke( Request $request, Response $response ): Response {
-        return $this->render($response, static::TWIG_TEMPLATE);
+        return $this->render($request, $response);
     }
 
     /**
-     * Render the specified twig template using the class-level context array.
+     * Render the specified template (or the class default) with the specified context.
      */
-    protected function render( Response $response, string $template ): Response {
-        return $this->view->render($response, $template, $this->context);
+    protected function render( Request $request, Response $response, array $context = [], ?string $template = null ): Response {
+        return $this->view->render($response, $template ?? static::VIEW_TEMPLATE, $context);
     }
 
 }

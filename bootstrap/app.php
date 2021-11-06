@@ -2,7 +2,7 @@
 
 use Slim\Factory\AppFactory;
 use DI\ContainerBuilder;
-use Symfony\Component\Dotenv\Dotenv;
+use Dotenv\Dotenv;
 use Slim\Views\TwigMiddleware;
 use spl\SPL;
 
@@ -17,11 +17,11 @@ return function() {
     SPL::init();
 
     // load environment file
-    $dotenv = new Dotenv();
-    $dotenv->load(APP_ROOT. '/.env');
+    $dotenv = Dotenv::createUnsafeImmutable(APP_ROOT);
+    $dotenv->safeLoad();
 
     // set debug flag based on env file
-    SPL::setDebug(filter_var($_ENV['APP_DEBUG'], FILTER_VALIDATE_BOOLEAN));
+    SPL::setDebug(env('APP_DEBUG', false));
 
     // create a ContainerBuilder instance into which we can load our definitions
     $containerBuilder = new ContainerBuilder();
@@ -45,6 +45,9 @@ return function() {
 
     // add the Twig middleware to handle templating
     $app->add(TwigMiddleware::createFromContainer($app));
+
+    // error handling middleware - this must be the last middleware
+    $app->addErrorMiddleware(SPL::isDebug(), true, true);
 
     // load our routes
     (require APP_ROOT . '/bootstrap/routes.php')($app);

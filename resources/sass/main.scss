@@ -1,0 +1,28 @@
+@charset "utf-8";
+
+@import "./bulma/bulma.sass";
+
+html {
+    background: #eee;
+}
+
+main {
+    margin: 2rem 1rem;
+}
+
+.hero-body .subtitle {
+    padding-top: 1rem;
+}
+
+footer {
+
+    .container {
+        padding: 1rem 0;
+        border-top: 1px solid #cccccc;
+    }
+
+    span {
+        white-space: nowrap;
+    }
+
+}

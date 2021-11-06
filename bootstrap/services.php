@@ -16,6 +16,10 @@ return function( ContainerBuilder $containerBuilder ) {
             return $c->get(Twig::class);
         },
 
+        'db' => function( ContainerInterface $c ) {
+            return $c->get(DatabaseConnection::class);
+        },
+
         Twig::class => function( ContainerInterface $c ) {
 
             $settings = $c->get('config')['view'];
@@ -47,17 +51,6 @@ return function( ContainerBuilder $containerBuilder ) {
             return $c->get(ConnectionManager::class)->get();
 
         },
-
-
-        // 'db' => function( ContainerInterface $c ) {
-
-        //     $dsn = $c->get('config')['database.dsn'];
-
-        //     return ConnectionManager::createFromDSN(
-        //         DSN::fromString($dsn)
-        //     );
-
-        // },
 
     ]);
 

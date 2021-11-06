@@ -2,5 +2,7 @@
 composer.lock
 /node_modules
 /public/dist
+
+/resources/sass/bulma
 /var
 /vendor

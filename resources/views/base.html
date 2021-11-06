@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html class="has-navbar-fixed-top">
+    <head>
+        {% block head %}
+
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>{% if page_title %}{{ page_title }} | {% endif %}My App</title>
+
+        <meta name="description" content="{{ page_description }}">
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <link rel="stylesheet" type="text/css" href="/dist/css/main.css">
+
+        {% block styles %}{% endblock %}
+
+        {% endblock %}
+    </head>
+    <body class="{{ module }} {{ page_class }}">
+
+        {% block header %}
+
+        <nav class="navbar is-info is-fixed-top">
+            <div class="container">
+                <div class="navbar-brand">
+                    <a class="navbar-item brand-text" href="/">
+                        My App
+                    </a>
+                    <div class="navbar-burger burger" data-target="navMenu">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
+                <div id="navMenu" class="navbar-menu">
+                    <div class="navbar-start">
+                        {% for key, item in config.modules %}
+                        <a class="navbar-item {% if key == current_module %}is-active{% endif %}" href="/{{ key }}">{{ item.name }}</a>
+                        {% endfor  %}
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        {% endblock %}
+
+        <main>
+        <div class="container">
+        {% block main %}{% endblock %}
+        </div>
+        </main>
+
+        {% block footer %}
+        <footer>
+            <div class="container">
+                <div class="columns">
+                    <div class="column">
+                        © 2021 Simon Downes.
+                    </div>
+                </div>
+            </div>
+        </footer>
+        {% endblock %}
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/cash/8.1.0/cash.min.js"></script>
+        <script src="/js/main.js"></script>
+
+        {% block scripts %}{% endblock %}
+
+    </body>
+</html>
